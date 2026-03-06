@@ -1,0 +1,11 @@
+﻿fastapi
+uvicorn
+pydantic
+python-dotenv
+python-multipart
+requests
+groq
+numpy
+faiss-cpu
+sentence-transformers
+pypdf
