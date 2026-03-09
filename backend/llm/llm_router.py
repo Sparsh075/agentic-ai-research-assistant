@@ -17,7 +17,7 @@ from backend.llm.groq_client import (
     resolve_model as resolve_groq_model,
     stream_response as stream_response_groq,
 )
-from backend.logging.logger import get_logger
+from backend.app_logger.logger import get_logger
 
 if load_dotenv is not None:
     load_dotenv(dotenv_path=Path('.env'), override=True)
@@ -294,3 +294,4 @@ def stream_response(
 
     for token in _stream_with_ollama(prompt=prompt, model=model, fast=fast, options=options):
         yield token
+

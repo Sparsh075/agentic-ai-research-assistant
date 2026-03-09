@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from backend.config import get_settings
-from backend.logging.logger import get_logger
+from backend.app_logger.logger import get_logger
 from backend.models.schemas import (
     AskRequest,
     LegacyAskRequest,
@@ -19,7 +19,7 @@ from backend.models.schemas import (
     SessionSettings,
 )
 from backend.project_manager import ProjectManager
-from llm.llm_router import build_ollama_options, get_llm_config, stream_response
+from backend.llm.llm_router import build_ollama_options, get_llm_config, stream_response
 
 
 logger = get_logger("api")
@@ -374,4 +374,6 @@ def ask_default_legacy(payload: LegacyAskRequest):
     response = _stream_answer(project_id, session_id, mapped)
     response.headers["X-Session-Id"] = session_id
     return response
+
+
 

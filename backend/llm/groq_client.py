@@ -3,7 +3,7 @@ import time
 from pathlib import Path
 from typing import Iterable, Optional
 
-from backend.logging.logger import get_logger
+from backend.app_logger.logger import get_logger
 
 try:
     from dotenv import load_dotenv
@@ -119,3 +119,4 @@ def stream_response(
             token = chunk.choices[0].delta.content or ""
         if token:
             yield token
+

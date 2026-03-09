@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
@@ -6,9 +6,9 @@ import shutil
 
 from fastapi import UploadFile
 
-from rag.rag_pipeline import RAGPipeline
+from backend.rag.rag_pipeline import RAGPipeline
 from backend.storage.sqlite_store import SQLiteStore
-from backend.logging.logger import get_logger
+from backend.app_logger.logger import get_logger
 
 
 class ProjectManager:
@@ -110,3 +110,5 @@ class ProjectManager:
     def get_pipeline(self, project_id: str) -> RAGPipeline:
         self.get_project(project_id)
         return self._ensure_pipeline_loaded(project_id)
+
+
