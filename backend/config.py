@@ -39,6 +39,7 @@ class Settings:
     host: str
     port: int
     cors_origins: list[str]
+    cors_origin_regex: str | None
 
 
 def get_settings() -> Settings:
@@ -49,6 +50,9 @@ def get_settings() -> Settings:
 
     host = (_getenv("HOST", "0.0.0.0") or "0.0.0.0").strip() or "0.0.0.0"
     port = int(_getenv("PORT", "10000") or "10000")
+    cors_origin_regex = _getenv("CORS_ORIGIN_REGEX")
+    if not cors_origin_regex and environment == "production":
+        cors_origin_regex = r"https://.*\.vercel\.app"
 
     return Settings(
         llm_provider=(_getenv("LLM_PROVIDER", "ollama") or "ollama").strip().lower() or "ollama",
@@ -57,4 +61,5 @@ def get_settings() -> Settings:
         host=host,
         port=port,
         cors_origins=_parse_origins(_getenv("CORS_ORIGINS")),
+        cors_origin_regex=cors_origin_regex,
     )
