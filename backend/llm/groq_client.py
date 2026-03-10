@@ -11,7 +11,7 @@ except Exception:
     load_dotenv = None
 
 if load_dotenv is not None:
-    load_dotenv(dotenv_path=Path('.env'), override=True)
+    load_dotenv(dotenv_path=Path(".env"), override=False)
 
 
 def _getenv(key: str, default: Optional[str] = None) -> Optional[str]:

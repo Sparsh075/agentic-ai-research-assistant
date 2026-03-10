@@ -20,7 +20,7 @@ from backend.llm.groq_client import (
 from backend.app_logger.logger import get_logger
 
 if load_dotenv is not None:
-    load_dotenv(dotenv_path=Path('.env'), override=True)
+    load_dotenv(dotenv_path=Path(".env"), override=False)
 
 
 def _getenv(key: str, default: Optional[str] = None) -> Optional[str]:
