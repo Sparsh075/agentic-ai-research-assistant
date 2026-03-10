@@ -1,35 +1,56 @@
-﻿from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
-from typing import Iterable, Optional
 from time import perf_counter
+from typing import Iterable, Optional
 
+from backend.app_logger.logger import get_logger
 from backend.llm.llm_router import generate_response
 from backend.rag.pdf_loader import load_and_chunk_pdf_with_metadata
-from backend.app_logger.logger import get_logger
 
 
 class RAGPipeline:
     _embedder = None
+    _faiss = None
+    _np = None
 
     def __init__(self, pdf_path: Optional[str] = None):
         self.logger = get_logger("rag-pipeline")
-        if RAGPipeline._embedder is None:
-            RAGPipeline._embedder = SentenceTransformer(
-                "sentence-transformers/all-MiniLM-L6-v2"
-            )
-        self.embedder = RAGPipeline._embedder
+        self.embedder = self._get_embedder()
         self.index = None
         self.text_chunks = []
         self.chunk_records = []
         self.document_name = None
         self.documents = []
-        self.chat_history = []  # MEMORY
+        self.chat_history = []
 
         if pdf_path:
             self.load_pdf(pdf_path)
 
+    @classmethod
+    def _get_embedder(cls):
+        if cls._embedder is None:
+            from sentence_transformers import SentenceTransformer
+
+            cls._embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        return cls._embedder
+
+    @classmethod
+    def _get_faiss(cls):
+        if cls._faiss is None:
+            import faiss
+
+            cls._faiss = faiss
+        return cls._faiss
+
+    @classmethod
+    def _get_numpy(cls):
+        if cls._np is None:
+            import numpy as np
+
+            cls._np = np
+        return cls._np
+
     def build_index(self, records: Iterable[dict]):
+        faiss = self._get_faiss()
+        np = self._get_numpy()
         self.chunk_records = list(records)
         self.text_chunks = [record["text"] for record in self.chunk_records]
         emb_start = perf_counter()
@@ -72,6 +93,7 @@ class RAGPipeline:
     def retrieve_with_sources(self, query: str, k: int = 3) -> list[dict]:
         if self.index is None:
             return []
+        np = self._get_numpy()
         t0 = perf_counter()
         query_vec = self.embedder.encode([query])
         distances, indices = self.index.search(np.array(query_vec), k)
@@ -207,4 +229,3 @@ Answer:"""
 
     def answer(self, question: str):
         return self.ask(question)
-
