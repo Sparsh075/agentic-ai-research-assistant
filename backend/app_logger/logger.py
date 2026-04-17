@@ -1,7 +1,7 @@
 ﻿import logging
 import sys
 
-from backend.config import get_settings
+from ..config import get_settings
 
 
 def get_logger(name: str) -> logging.Logger:

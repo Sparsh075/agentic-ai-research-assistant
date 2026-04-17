@@ -1,9 +1,9 @@
 from time import perf_counter
 from typing import Iterable, Optional
 
-from backend.app_logger.logger import get_logger
-from backend.llm.llm_router import generate_response
-from backend.rag.pdf_loader import load_and_chunk_pdf_with_metadata
+from ..app_logger.logger import get_logger
+from ..llm.llm_router import generate_response
+from .pdf_loader import load_and_chunk_pdf_with_metadata
 
 
 class RAGPipeline:

@@ -1,5 +1,5 @@
 import numpy as np
-from backend.rag.embeddings import embed_texts
+from .embeddings import embed_texts
 
 def retrieve_top_k(query, chunks, index, k=3):
     query_embedding = embed_texts([query])

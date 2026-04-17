@@ -1,9 +1,7 @@
-﻿fastapi
+fastapi
 uvicorn[standard]
-pydantic
-python-dotenv
-python-multipart
 requests
+python-dotenv
 groq
 numpy
 faiss-cpu

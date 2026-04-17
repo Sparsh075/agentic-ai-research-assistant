@@ -10,14 +10,14 @@ try:
 except Exception:
     load_dotenv = None
 
-from backend.llm.groq_client import (
+from .groq_client import (
     DEFAULT_GROQ_MODEL,
     generate_response as generate_response_groq,
     list_available_models as list_groq_models,
     resolve_model as resolve_groq_model,
     stream_response as stream_response_groq,
 )
-from backend.app_logger.logger import get_logger
+from ..app_logger.logger import get_logger
 
 if load_dotenv is not None:
     load_dotenv(dotenv_path=Path(".env"), override=False)

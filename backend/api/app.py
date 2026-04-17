@@ -9,17 +9,18 @@ from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from backend.config import get_settings
-from backend.app_logger.logger import get_logger
-from backend.models.schemas import (
+from ..config import get_settings
+from ..app_logger.logger import get_logger
+from ..models.schemas import (
     AskRequest,
     LegacyAskRequest,
     ProjectCreateRequest,
     SessionCreateRequest,
     SessionSettings,
 )
-from backend.project_manager import ProjectManager
-from backend.llm.llm_router import build_ollama_options, get_llm_config, stream_response
+from ..project_manager import ProjectManager
+from ..llm.llm_router import build_ollama_options, get_llm_config, stream_response
+from .routes import query_router, graph_router, recommendations_router, memory_router
 
 
 logger = get_logger("api")
@@ -35,6 +36,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include new API routes
+app.include_router(query_router, prefix="/api/query", tags=["query"])
+app.include_router(graph_router, prefix="/api/graph", tags=["graph"])
+app.include_router(recommendations_router, prefix="/api/recommendations", tags=["recommendations"])
+app.include_router(memory_router, prefix="/api/memory", tags=["memory"])
 
 
 @app.on_event("startup")

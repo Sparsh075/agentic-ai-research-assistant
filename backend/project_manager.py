@@ -6,9 +6,9 @@ import shutil
 
 from fastapi import UploadFile
 
-from backend.rag.rag_pipeline import RAGPipeline
-from backend.storage.sqlite_store import SQLiteStore
-from backend.app_logger.logger import get_logger
+from .rag.rag_pipeline import RAGPipeline
+from .storage.sqlite_store import SQLiteStore
+from .app_logger.logger import get_logger
 
 
 class ProjectManager:
