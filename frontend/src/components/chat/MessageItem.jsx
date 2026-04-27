@@ -1,6 +1,7 @@
 ﻿import { Copy, RefreshCw } from "lucide-react";
 import DiagnosticsPanel from "./DiagnosticsPanel";
 import SourceCards from "./SourceCards";
+import TopicChips from "./TopicChips";
 
 function formatMeta(message) {
   const model = message.diagnostics?.model || "llama3:8b";
@@ -16,8 +17,10 @@ export default function MessageItem({
   onToggleSource,
   onCopy,
   onRegenerate,
+  onTopicClick = () => {},
 }) {
   const isAssistant = message.role === "assistant";
+  const topics = message.topics || [];
 
   return (
     <div className={`bubble fade-in ${message.role === "user" ? "user" : "assistant"}`}>
@@ -40,6 +43,10 @@ export default function MessageItem({
       </div>
 
       <div className="bubble-content">{message.content}</div>
+
+      {isAssistant && topics.length > 0 && (
+        <TopicChips topics={topics} onTopicClick={onTopicClick} />
+      )}
 
       {isAssistant && <div className="meta-badge">{formatMeta(message)}</div>}
 

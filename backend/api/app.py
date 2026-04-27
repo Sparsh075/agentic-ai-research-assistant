@@ -9,18 +9,18 @@ from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from ..config import get_settings
-from ..app_logger.logger import get_logger
-from ..models.schemas import (
+from config import get_settings
+from app_logger.logger import get_logger
+from models.schemas import (
     AskRequest,
     LegacyAskRequest,
     ProjectCreateRequest,
     SessionCreateRequest,
     SessionSettings,
 )
-from ..project_manager import ProjectManager
-from ..llm.llm_router import build_ollama_options, get_llm_config, stream_response
-from .routes import query_router, graph_router, recommendations_router, memory_router
+from project_manager import ProjectManager
+from llm.llm_router import build_ollama_options, get_llm_config, stream_response
+from api.routes import query_router, graph_router, recommendations_router, memory_router
 
 
 logger = get_logger("api")

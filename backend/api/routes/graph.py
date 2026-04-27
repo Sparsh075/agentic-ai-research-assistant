@@ -2,10 +2,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from ...engines.graph_engine import GraphEngine
-from ...engines.memory_engine import MemoryEngine
-from ...utils.learning_path import LearningPathGenerator
-from ...app_logger.logger import get_logger
+from engines.graph_engine import GraphEngine
+from engines.memory_engine import MemoryEngine
+from utils.learning_path import LearningPathGenerator
+from app_logger.logger import get_logger
 
 router = APIRouter()
 logger = get_logger("graph-routes")

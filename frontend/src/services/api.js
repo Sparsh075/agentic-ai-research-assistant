@@ -71,6 +71,45 @@ export async function fetchLLMConfig() {
   return res.data;
 }
 
+/**
+ * Process query using enhanced AI pipeline with topic extraction and recommendations
+ * @param {string} query - User query
+ * @param {string} model - LLM model to use
+ * @param {boolean} useCache - Whether to use caching
+ * @returns {Promise<{response, topics, recommendations, explanation, cached}>}
+ */
+export async function processQuery(query, model = "llama3:8b", useCache = true) {
+  try {
+    const res = await api.post("/api/query/process", {
+      query,
+      model,
+      use_cache: useCache,
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error processing query:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get recommendations for a specific topic
+ * @param {string} topic - Topic to get recommendations for
+ * @param {number} limit - Maximum number of recommendations
+ * @returns {Promise<{recommendations, cached}>}
+ */
+export async function getRecommendations(topic, limit = 5) {
+  try {
+    const res = await api.get(
+      `/api/recommendations/${encodeURIComponent(topic)}?limit=${limit}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching recommendations:", error);
+    return { recommendations: [], cached: false };
+  }
+}
+
 export async function streamAsk({ projectId, sessionId, question, model, settings }) {
   const startedAt = performance.now();
   const response = await fetch(`${API_URL}/projects/${projectId}/ask/${sessionId}`, {

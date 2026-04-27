@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
@@ -6,9 +6,9 @@ import shutil
 
 from fastapi import UploadFile
 
-from .rag.rag_pipeline import RAGPipeline
-from .storage.sqlite_store import SQLiteStore
-from .app_logger.logger import get_logger
+from rag.rag_pipeline import RAGPipeline
+from storage.sqlite_store import SQLiteStore
+from app_logger.logger import get_logger
 
 
 class ProjectManager:

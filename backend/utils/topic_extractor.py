@@ -2,49 +2,65 @@
 from typing import List, Dict
 import re
 
-from ..engines.ai_engine import AIEngine
-from ..app_logger.logger import get_logger
+from engines.ai_engine import AIEngine
+from app_logger.logger import get_logger
 
 class TopicExtractor:
+    """Extract clean, technical topics from queries and responses"""
+    
     def __init__(self):
         self.ai_engine = AIEngine()
         self.logger = get_logger("topic-extractor")
 
     def extract_topics(self, user_query: str, ai_response: str) -> List[str]:
-        """Extract 3-5 clean, meaningful technical topics using AI."""
+        """
+        Extract 3-5 clean topics from user query and AI response.
+        Delegates to AIEngine for LLM-based extraction.
+        """
         topics = self.ai_engine.extract_topics_from_response(user_query, ai_response)
-        return self._normalize_topics(topics)
+        
+        # Validate result
+        if not topics:
+            self.logger.warning("No topics extracted, using fallback")
+            topics = self._fallback_extraction(user_query)
+        
+        return topics[:5]  # Ensure max 5
 
-    def _normalize_topics(self, topics: List[str]) -> List[str]:
-        """Clean and deduplicate topic strings, ensure 3-5 short topics."""
-        cleaned = []
+    def _fallback_extraction(self, text: str) -> List[str]:
+        """
+        Fallback extraction when LLM fails.
+        Uses regex to extract potential topics from text.
+        """
+        if not text or not text.strip():
+            return []
+        
+        topics = []
         seen = set()
-
-        for raw in topics:
-            if not isinstance(raw, str):
-                continue
-            topic = raw.strip().lower()
-            topic = re.sub(r'[^a-z0-9 ]+', ' ', topic)
-            topic = re.sub(r'\s{2,}', ' ', topic).strip()
-            words = topic.split()
-            if len(words) > 3:
-                topic = ' '.join(words[:3])
-            if not topic or len(topic) < 3 or topic in seen:
-                continue
-            seen.add(topic)
-            cleaned.append(topic)
-            if len(cleaned) >= 5:
-                break
-
+        
+        # Extract capitalized terms (potential technical terms)
+        capitalized = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b', text)
+        
+        # Extract multi-word phrases
+        phrases = re.findall(r'\b[a-z]+(?:\s+[a-z]+){1,2}\b', text, re.IGNORECASE)
+        
+        for term in capitalized + phrases:
+            clean = term.strip().lower()
+            if 2 <= len(clean) <= 30 and clean not in seen and len(clean.split()) <= 3:
+                topics.append(clean)
+                seen.add(clean)
+                if len(topics) >= 5:
+                    break
+        
         # Ensure at least 3 topics
-        while len(cleaned) < 3 and len(cleaned) < len(topics):
-            for raw in topics[len(cleaned):]:
-                if isinstance(raw, str):
-                    topic = raw.strip().lower()[:20]  # Shorten
-                    if topic not in seen:
-                        cleaned.append(topic)
-                        seen.add(topic)
-                        if len(cleaned) >= 3:
-                            break
-
-        return cleaned[:5]
+        while len(topics) < 3:
+            words = text.split()
+            for word in words:
+                clean = word.strip().lower()
+                if 4 <= len(clean) <= 30 and clean not in seen:
+                    topics.append(clean)
+                    seen.add(clean)
+                    if len(topics) >= 3:
+                        break
+            break
+        
+        return topics[:5]

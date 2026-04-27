@@ -1,8 +1,8 @@
 # backend/utils/learning_path.py
 from typing import List, Dict
-from ..engines.graph_engine import GraphEngine
-from ..engines.recommendation_engine import RecommendationEngine
-from ..app_logger.logger import get_logger
+from engines.graph_engine import GraphEngine
+from engines.recommendation_engine import RecommendationEngine
+from app_logger.logger import get_logger
 
 class LearningPathGenerator:
     def __init__(self):
@@ -15,7 +15,7 @@ class LearningPathGenerator:
         # Use BFS to find related topics
         related_topics = self.graph_engine.graph.bfs_traversal(start_topic, max_depth=5)
 
-        # Categorize by difficulty (this would be enhanced with metadata)
+        # Categorize by difficulty
         beginner = []
         intermediate = []
         advanced = []
@@ -37,13 +37,10 @@ class LearningPathGenerator:
 
     def get_prerequisites(self, topic: str) -> List[str]:
         """Get prerequisite topics for a given topic"""
-        # This would use graph relationships to find prerequisites
-        # For now, return related topics at lower depth
         related = self.graph_engine.graph.get_related_topics(topic, limit=5)
         return [t for t, _, _ in related if t != topic][:3]
 
     def get_advanced_topics(self, topic: str) -> List[str]:
         """Get advanced topics that build on the given topic"""
-        # Use BFS with higher depth
         bfs_results = self.graph_engine.graph.bfs_traversal(topic, max_depth=4)
         return [t for t, d in bfs_results if d >= 2][:5]

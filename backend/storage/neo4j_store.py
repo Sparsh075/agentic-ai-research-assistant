@@ -1,6 +1,6 @@
 # backend/storage/neo4j_store.py
 from typing import List, Dict, Any, Optional
-from ..app_logger.logger import get_logger
+from app_logger.logger import get_logger
 
 class Neo4jStore:
     def __init__(self, uri="bolt://localhost:7687", user="neo4j", password="password"):

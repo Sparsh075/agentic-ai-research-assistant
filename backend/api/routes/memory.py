@@ -1,7 +1,7 @@
 # backend/api/routes/memory.py
 from fastapi import APIRouter, HTTPException
-from ...engines.memory_engine import MemoryEngine
-from ...app_logger.logger import get_logger
+from engines.memory_engine import MemoryEngine
+from app_logger.logger import get_logger
 
 router = APIRouter()
 logger = get_logger("memory-routes")

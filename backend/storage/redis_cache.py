@@ -2,7 +2,7 @@
 import json
 from typing import Any, Optional, Dict
 import redis
-from ..app_logger.logger import get_logger
+from app_logger.logger import get_logger
 
 class RedisCache:
     def __init__(self, host='localhost', port=6379, db=0, password=None):

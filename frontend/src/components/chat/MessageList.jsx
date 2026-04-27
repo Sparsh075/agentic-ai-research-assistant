@@ -9,6 +9,7 @@ export default function MessageList({
   onToggleSource,
   onCopy,
   onRegenerate,
+  onTopicClick = () => {},
 }) {
   const endRef = useRef(null);
 
@@ -35,6 +36,7 @@ export default function MessageList({
           onToggleSource={onToggleSource}
           onCopy={onCopy}
           onRegenerate={onRegenerate}
+          onTopicClick={onTopicClick}
         />
       ))}
 

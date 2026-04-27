@@ -1,9 +1,9 @@
-﻿import os
+import os
 import time
 from pathlib import Path
 from typing import Iterable, Optional
 
-from ..app_logger.logger import get_logger
+from app_logger.logger import get_logger
 
 try:
     from dotenv import load_dotenv

@@ -1,14 +1,25 @@
 # backend/engines/memory_engine.py
 from typing import Any, Optional, Dict
-from ..dsa.hash_map import TopicCache
-from ..app_logger.logger import get_logger
+from dsa.hash_map import TopicCache
+from app_logger.logger import get_logger
 
 class MemoryEngine:
+    _instance = None
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(MemoryEngine, cls).__new__(cls, *args, **kwargs)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self):
+        if self._initialized:
+            return
         self.query_cache = TopicCache(max_size=500)  # Cache query responses
         self.topic_cache = TopicCache(max_size=1000)  # Cache topic data
         self.recommendation_cache = TopicCache(max_size=200)  # Cache recommendations
         self.logger = get_logger("memory-engine")
+        self._initialized = True
 
     def get_cached_query(self, query_hash: str) -> Optional[Dict[str, Any]]:
         """Get cached query response"""

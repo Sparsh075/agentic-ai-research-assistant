@@ -2,9 +2,9 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from ...engines.recommendation_engine import RecommendationEngine
-from ...engines.memory_engine import MemoryEngine
-from ...app_logger.logger import get_logger
+from engines.recommendation_engine import RecommendationEngine
+from engines.memory_engine import MemoryEngine
+from app_logger.logger import get_logger
 
 router = APIRouter()
 logger = get_logger("recommendations-routes")
